@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterestRateOfReturn", "InterestRateOfReturn\InterestRateOfReturn.csproj", "{1DF91E1B-80EF-4080-98F6-4731A3A0D7E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelLibUnitTest", "ExcelLibUnitTest\ExcelLibUnitTest.csproj", "{44F58F03-0964-44F1-8133-B1349EAEB93C}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLServerFunctions", "SQLServerFunctions\SQLServerFunctions.sqlproj", "{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1DF91E1B-80EF-4080-98F6-4731A3A0D7E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DF91E1B-80EF-4080-98F6-4731A3A0D7E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DF91E1B-80EF-4080-98F6-4731A3A0D7E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DF91E1B-80EF-4080-98F6-4731A3A0D7E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44F58F03-0964-44F1-8133-B1349EAEB93C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44F58F03-0964-44F1-8133-B1349EAEB93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44F58F03-0964-44F1-8133-B1349EAEB93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44F58F03-0964-44F1-8133-B1349EAEB93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B091B2C6-36DE-4D9A-A28D-A9584453BFC0}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F3AB82FF-8A84-4742-9FF7-B8B25C41718D}
+	EndGlobalSection
+EndGlobal
