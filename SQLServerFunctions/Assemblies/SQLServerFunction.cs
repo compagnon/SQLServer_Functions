@@ -3,7 +3,6 @@ using Microsoft.SqlServer.Server;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
 using System.Linq;
@@ -17,7 +16,7 @@ using System.Linq;
 /// </summary>
 public partial class UserDefinedFunctions
 {
-
+    /* for test purpose     
     public const double VAT_TAX = .020;
     [Microsoft.SqlServer.Server.SqlFunction]
     public static SqlDouble addVAT(SqlDouble originalAmount)
@@ -41,6 +40,7 @@ public partial class UserDefinedFunctions
     {
         return VAT_TAX;
     }
+    */
 
 
     [SqlFunction(DataAccess = DataAccessKind.Read,
@@ -72,7 +72,7 @@ public partial class UserDefinedFunctions
                             reader.GetSqlString(4),
                             reader.GetSqlString(5),
                             reader.GetSqlString(6)
-                             } ) ;
+                             });
                 }
             }
 
@@ -80,10 +80,10 @@ public partial class UserDefinedFunctions
             return resultCollection;
         }
     }
-        public static void Invs_FillRow(
-           object resultObj,
-           out SqlString InvsIT, out SqlString InvsIN, out SqlString InvsKey, out SqlString InvsId, out SqlString InvsReference1, out SqlString InvsReference2, out SqlString Phase)
-        {
+    public static void Invs_FillRow(
+       object resultObj,
+       out SqlString InvsIT, out SqlString InvsIN, out SqlString InvsKey, out SqlString InvsId, out SqlString InvsReference1, out SqlString InvsReference2, out SqlString Phase)
+    {
         List<Object> result = (List<Object>)resultObj;
 
         InvsIT = (SqlString)result[0];
@@ -95,14 +95,42 @@ public partial class UserDefinedFunctions
         Phase = (SqlString)result[6];
     }
 
-    
-
-
-    [Microsoft.SqlServer.Server.SqlFunction]
-    public static SqlDouble XIRR(List<SqlDouble> cashflows, List<SqlDateTime> dates, SqlDouble estimate)
+    /// <summary>
+    /// calculate the Internal Rate return given 2 lists of (value,date) for cashflows
+    /// </summary>
+    /// <param name="cashflows">Name of a table containing the value of cashflows</param>
+    /// <param name="cashflowsColumn">Column Name of the value inside cashflows table</param>
+    /// <param name="dates">Name of a table containing the dates of each given cashflows (could be the same that cashFlows)</param>
+    /// <param name="datesColumn">Column Name of the dates inside the dates table</param>
+    /// <param name="estimate">could be NULL</param>
+    /// <returns></returns>
+    [SqlFunction(DataAccess = DataAccessKind.Read, TableDefinition = "calculatedIRR float", IsDeterministic = true, IsPrecise = false)]
+    public static SqlDouble XIRR(SqlString cashflows, SqlString cashflowsColumn, SqlString dates, SqlString datesColumn, SqlDouble estimate)
     {
-        List<Double> c1 = cashflows.Select(x => x.Value).ToList();
-        List<DateTime> c2 = dates.Select(x => x.Value).ToList();
+        List<Double> c1 = new List<double>(30);
+        List<DateTime> c2 = new List<DateTime>(30);
+
+        using (SqlConnection conn = new SqlConnection("context connection=true"))
+        {
+            conn.Open();
+
+            SqlCommand cmd = new SqlCommand(String.Format("select {0} from {1}", cashflowsColumn, cashflows));
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    c1.Add(reader.GetDouble(0));
+                }
+            }
+            cmd = new SqlCommand(String.Format("select {0} from {1}", datesColumn, dates));
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    c2.Add(reader.GetDateTime(0));
+                }
+            }
+        }
 
         if (estimate == SqlDouble.Null)
         {
@@ -112,14 +140,16 @@ public partial class UserDefinedFunctions
         {
             return new XIRR(c1, c2, estimate.Value).Calculate();
         }
+
     }
 
-    [Microsoft.SqlServer.Server.SqlFunction]
-    public static SqlDouble XIRR(List<SqlDouble> cashflows, List<SqlDateTime> dates, SqlInt16 maxFloatingPoints, SqlInt16 maxNbDecimalDigits)
+
+    [Microsoft.SqlServer.Server.SqlFunction(Name = "", DataAccess = DataAccessKind.Read, TableDefinition = "calculatedIRR float", IsDeterministic = true, IsPrecise = false)]
+    public static SqlDouble XIRR(List<SqlDouble> cashflows, List<SqlDateTime> dates, SqlInt32 maxFloatingPoints, SqlInt32 maxNbDecimalDigits)
     {
         double precision; int decimals;
 
-        if (maxFloatingPoints == SqlInt16.Null)
+        if (maxFloatingPoints == SqlInt32.Null)
         {
             precision = 0.00001;
         }
@@ -143,6 +173,5 @@ public partial class UserDefinedFunctions
         return new XIRR(c1, c2).Calculate(precision, decimals);
 
     }
-
 
 }

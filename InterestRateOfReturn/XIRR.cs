@@ -85,6 +85,28 @@ namespace Excel.Lib
             calculationLoop++;
             return _cf.Select(x => (x.amount / (Math.Pow((1 + interestRate), x.duration)))).Sum(x => x);
         }
+
+
+    }
+
+    /// <summary>
+    /// IRR is a specific case of XIRR
+    /// </summary>
+    public class IRR:XIRR
+    {
+        /// <summary>
+        /// Constructor of the XIRR
+        /// </summary>
+        /// <param name="cashFlow"></param>
+        /// <param name="cashFlowDate"></param>
+        /// <param name="Guess"> by default : 10%</param>
+        public IRR(List<Double> cashFlow, Nullable<Double> Guess = null) : this(cashFlow, 0.5 * Guess, 2 * Guess)
+        {
+            
+        }
+
+        public IRR(List<Double> cashFlow,  Nullable<Double> Inf, Nullable<Double> Sup): base(cashFlow, cashFlowDate:null, Inf:Inf, Sup: Sup) { }        
+
     }
 
     /// <summary>
@@ -98,7 +120,7 @@ namespace Excel.Lib
         #endregion
 
         /// <summary>
-        /// Constructor of the XIRR c
+        /// Constructor of the XIRR
         /// </summary>
         /// <param name="cashFlow"></param>
         /// <param name="cashFlowDate"></param>
@@ -107,41 +129,49 @@ namespace Excel.Lib
         {
         }
 
-        public XIRR( List<Double> cashFlow, List<DateTime> cashFlowDate, Nullable<Double> Inf, Nullable<Double> Sup)
+        public XIRR(List<Double> cashFlow, List<DateTime> cashFlowDate, Nullable<Double> Inf, Nullable<Double> Sup) : this(cashFlow, ToFractionOfYears(cashFlowDate, cashFlow.Count), Inf, Sup)
         {
-            // preconditions
-            if (cashFlow.Count > cashFlowDate.Count)
-                throw new Exception("Date(s) in Cashflow is missing / not the same number");
-            else if (cashFlow.Count < cashFlowDate.Count)
-                throw new Exception("Cashflow(s) value is missing / or too many date");
-            else if (cashFlow.Where(x => x < 0).Count() == 0)
-                throw new Exception("Internal Rate not possible / no negative cash flow");
-            else if ( cashFlow.Where(x => x>0).Count() == 0 )
-                throw new Exception("Internal Rate not possible / no positive cash flow");                        
-       
-            // input validated
-            List<double> cashFlowDuration = ToFractionOfYears(cashFlowDate);
-
-            if( Inf is null || Sup is null )
-                _cf = new Cashflows(cashFlow, cashFlowDuration);
-            else            
-                _cf = new Cashflows(cashFlow, cashFlowDuration, Math.Min(Inf.Value,Sup.Value), Math.Max(Inf.Value, Sup.Value));            
         }
 
+            public XIRR(List<Double> cashFlow, List<double> cashFlowDuration, Nullable<Double> Inf, Nullable<Double> Sup)
+        {
+                // preconditions
+                if (cashFlow.Count > cashFlowDuration.Count)
+                    throw new Exception("Date(s) in Cashflow is missing / not the same number");
+                else if (cashFlow.Count < cashFlowDuration.Count)
+                    throw new Exception("Cashflow(s) value is missing / or too many date");
+                else if (cashFlow.Where(x => x < 0).Count() == 0)
+                    throw new Exception("Internal Rate not possible / no negative cash flow");
+                else if (cashFlow.Where(x => x > 0).Count() == 0)
+                    throw new Exception("Internal Rate not possible / no positive cash flow");
+                // input validated
 
-        private static List<Double> ToFractionOfYears(List<DateTime> dates)
-        {            
-            var firstDate = dates.Min(x => x.Date);
+                if (Inf is null || Sup is null)
+                    _cf =  new Cashflows(cashFlow, cashFlowDuration);
+                else
+                    _cf = new Cashflows(cashFlow, cashFlowDuration, Math.Min(Inf.Value, Sup.Value), Math.Max(Inf.Value, Sup.Value));
+        }
+        
+
+        private static List<Double> ToFractionOfYears(List<DateTime> dates, int count)
+        {
+            if (dates is null)
+            {
+                List<int> a = Enumerable.Range(0, count - 1).ToList<int>();
+                 a.Cast<Double>().ToList<double>();
+            }
+
+            DateTime firstDate = dates.Min(x => x.Date);
             return dates
                 .Select(x => ((double)x.Date.Subtract(firstDate).Days) / DAYS_YEARS)
                 .ToList();
         }
 
         /// <summary>
-        /// 
+        /// Calculate the IRR
         /// </summary>
-        /// <param name="precision">The number of zero behind floating points.</param>
-        /// <param name="decimals">The number of decimal places in the return value.</param>
+        /// <param name="precision">The precision behind floating points. by default 10E-8 like excel</param>
+        /// <param name="decimals">The number of decimal places in the return value. by default 8</param>
         /// <returns></returns>
         public double Calculate(double precision = 0.00000001, int decimals = 8)
         {
@@ -152,7 +182,6 @@ namespace Excel.Lib
                 result = _cf.CashFlowIteration();
             }
             return _cf.getInternalRate(decimals);                
-
         }
 
     }

@@ -1,4 +1,0 @@
-﻿CREATE LOGIN [ExcelFunctionCLR-Login] FROM CERTIFICATE ExcelFunctionCLR
-GO
-GRANT UNSAFE ASSEMBLY TO [ExcelFunctionCLR-Login]
-GO

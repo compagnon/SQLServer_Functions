@@ -34,7 +34,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>Guillaume[AT]SAGIS.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SQLServerPK.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -51,8 +51,11 @@
     <Compile Include="XIRR.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Guillaume[AT]SAGIS.pfx" />
-    <None Include="Guillaume[AT]SAGIS.pfx_1.pvk" />
+    <None Include="SQLServerPK.pfx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

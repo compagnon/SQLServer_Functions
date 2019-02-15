@@ -9,10 +9,7 @@ Modèle de script de post-déploiement
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-----activate the security 
---sp_configure 'CLR strict security',1
---RECONFIGURE
---GO
+
 
 -- Enable show advanced options on the server
 sp_configure 'show advanced options',0

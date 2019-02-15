@@ -18,7 +18,15 @@ sp_configure 'clr enabled',1
 RECONFIGURE
 GO
 
---desactivate the security for being able to add SAFE CLR
+--do not desactivate the security in prod env. for convenience, in dev, disable it for being able to create assembly with no certificate nor sign process
+--sp_configure 'CLR strict security',0
+
+-- to be sure the CLR security is strict!
 sp_configure 'CLR strict security',1
 RECONFIGURE
 GO
+
+-- create the certicate , login in the database if needed
+:r .\Security\Certificate.sql
+
+use $(DatabaseName)
