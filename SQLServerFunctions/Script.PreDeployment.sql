@@ -25,8 +25,3 @@ GO
 sp_configure 'CLR strict security',1
 RECONFIGURE
 GO
-
--- create the certicate , login in the database if needed
-:r .\Security\Certificate.sql
-
-use $(DatabaseName)

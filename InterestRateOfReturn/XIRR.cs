@@ -18,7 +18,6 @@ namespace Excel.Lib
     /// </summary>
     class Cashflows
     {
-
         public Cashflows(List<Double> cashFlow, List<Double> dates, double internalRateMin = -1 + 10E-10 , double internalRateMax = +10000)
         {
             internalRateInf = internalRateMin;
@@ -92,27 +91,30 @@ namespace Excel.Lib
     /// <summary>
     /// IRR is a specific case of XIRR
     /// </summary>
-    public class IRR:XIRR
+    public class IRR:XIRR    
     {
         /// <summary>
-        /// Constructor of the XIRR
+        /// Constructor of the IRR
         /// </summary>
         /// <param name="cashFlow"></param>
-        /// <param name="cashFlowDate"></param>
         /// <param name="Guess"> by default : 10%</param>
         public IRR(List<Double> cashFlow, Nullable<Double> Guess = null) : this(cashFlow, 0.5 * Guess, 2 * Guess)
-        {
-            
-        }
+        { }
 
-        public IRR(List<Double> cashFlow,  Nullable<Double> Inf, Nullable<Double> Sup): base(cashFlow, cashFlowDate:null, Inf:Inf, Sup: Sup) { }        
-
+        /// <summary>
+        /// Constructor of the IRR calculation
+        /// </summary>
+        /// <param name="cashFlow">list of double value</param>
+        /// <param name="Inf">rate must be between Inf value and Sup Value</param>
+        /// <param name="Sup"></param>
+        public IRR(List<Double> cashFlow,  Nullable<Double> Inf, Nullable<Double> Sup): base(cashFlow, cashFlowDuration: Enumerable.Range(0, cashFlow.Count).Select(x => (double)x).ToList(), Inf:Inf, Sup: Sup)
+        { }
     }
 
-    /// <summary>
-    /// XIR uses the dichotomy method
-    /// </summary>
-    public class XIRR
+        /// <summary>
+        /// XIR uses the dichotomy method
+        /// </summary>
+        public class XIRR
     {
         #region attributs
         public const int DAYS_YEARS = 365;
@@ -128,12 +130,25 @@ namespace Excel.Lib
         public XIRR(List<Double> cashFlow, List<DateTime> cashFlowDate, Nullable<Double> Guess =null ):this(cashFlow,cashFlowDate, 0.5 * Guess,  2* Guess )
         {
         }
-
+        /// <summary>
+        /// Constructor of XIRR
+        /// </summary>
+        /// <param name="cashFlow">List of amount values</param>
+        /// <param name="cashFlowDate">associated list of dates</param>
+        /// <param name="Inf">rate must be between Inf value and Sup Value</param>
+        /// <param name="Sup"></param>
         public XIRR(List<Double> cashFlow, List<DateTime> cashFlowDate, Nullable<Double> Inf, Nullable<Double> Sup) : this(cashFlow, ToFractionOfYears(cashFlowDate, cashFlow.Count), Inf, Sup)
         {
         }
 
-            public XIRR(List<Double> cashFlow, List<double> cashFlowDuration, Nullable<Double> Inf, Nullable<Double> Sup)
+        /// <summary>
+        /// Constructor of XIRR
+        /// </summary>
+        /// <param name="cashFlow">List of amount values</param>
+        /// <param name="cashFlowDuration">associated list of duration (0 is the duration of the first flow)</param>
+        /// <param name="Inf">rate must be between Inf value and Sup Value</param>
+        /// <param name="Sup"></param>
+        public XIRR(List<Double> cashFlow, List<double> cashFlowDuration, Nullable<Double> Inf, Nullable<Double> Sup)
         {
                 // preconditions
                 if (cashFlow.Count > cashFlowDuration.Count)
@@ -155,12 +170,6 @@ namespace Excel.Lib
 
         private static List<Double> ToFractionOfYears(List<DateTime> dates, int count)
         {
-            if (dates is null)
-            {
-                List<int> a = Enumerable.Range(0, count - 1).ToList<int>();
-                 a.Cast<Double>().ToList<double>();
-            }
-
             DateTime firstDate = dates.Min(x => x.Date);
             return dates
                 .Select(x => ((double)x.Date.Subtract(firstDate).Days) / DAYS_YEARS)

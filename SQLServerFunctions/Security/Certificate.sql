@@ -1,4 +1,10 @@
-﻿use master
+﻿
+/** 
+TO install once the certificate in the MS SQL Server instance, the same certificate is used for signing the DLL / Assembly
+MUST BE DONE OUTSIDE VisualStudio , because "GRANT" is not allowed...
+*/
+-- use master
+-- GO
 
 CREATE MASTER KEY ENCRYPTION BY PASSWORD = '23987hxJ#KL95234nl0zBe';  
 GO  
@@ -11,18 +17,15 @@ CREATE CERTIFICATE ExcelFunctionCLR --AUTHORIZATION [$(DatabaseUser)]
 GO    
 
 
-:r .\Login.sql
+-- create the login in the database if needed
+-- create a login  to add permission "UNSAFE ASSEMBLY" to the certificate
+/*
+CREATE LOGIN [ExcelFunctionCLR-Login] FROM CERTIFICATE ExcelFunctionCLR
+GO
+
+GRANT UNSAFE ASSEMBLY TO [ExcelFunctionCLR-Login]
+GO
+*/
 
 
---CREATE ASSEMBLY ExcelFunction
---AUTHORIZATION [dbo]
---FROM 'C:\data\calculPerf\lib\InterestRateOfReturn.dll'
-----WITH PERMISSION_SET = SAFE;
---GO
-
---CREATE ASSEMBLY SQLExcelFunction
---AUTHORIZATION [dbo]
---FROM 'C:\data\calculPerf\lib\SQLServerFunctions.dll'
-----WITH PERMISSION_SET = SAFE;
---GO
 

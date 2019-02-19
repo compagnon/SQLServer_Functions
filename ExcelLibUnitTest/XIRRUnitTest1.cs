@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Excel.Lib;
+using System.Linq;
+
 namespace XIRRUnitTest
 {
 
@@ -23,13 +25,9 @@ namespace XIRRUnitTest
         public void SimpleDepotIRR()
         {
             List<double> cashFlows = new List<Double>() { -100, 110 };
-
-            IRR r = new IRR(cashFlows,0.1);
-
-
-
             Double result = new IRR(cashFlows).Calculate(0.1, 1); ;
             Assert.AreEqual(0.1, result);
+            
         }
 
         [TestMethod]
@@ -51,7 +49,7 @@ namespace XIRRUnitTest
             // excel precision for IRR is 8digits
             List<double> cashFlows = new List<Double>() { -70000, 12000, 15000, 18000, 21000, 26000 };
             Double result = new IRR(cashFlows).Calculate();
-            Assert.AreEqual(0.087, result);
+            Assert.AreEqual(0.08663095, result);
         }
         
         [TestMethod]
