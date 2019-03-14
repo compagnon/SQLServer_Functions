@@ -14,6 +14,8 @@ namespace XIRRUnitTest
         [TestMethod]
         public void SimpleDepot()
         {
+            System.Console.WriteLine("SimpleDepot");
+
             List<double> cashFlows = new List<Double>() { -100, 110 };
             List<DateTime> dates = new List<DateTime>() { new DateTime(2017, 12, 31), new DateTime(2018, 12, 31) };
 
@@ -28,6 +30,28 @@ namespace XIRRUnitTest
             Double result = new IRR(cashFlows).Calculate(0.1, 1); ;
             Assert.AreEqual(0.1, result);
             
+        }
+        [TestMethod]
+        public void MicrosoftSampleXIRR2()
+        {
+            // excel precision for XIRR is 8digits
+            List<double> cashFlows = new List<Double>() { -130052618.49, -400000, 17100, -400000, 133314986.32 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2013, 12, 31), new DateTime(2014, 11, 07), new DateTime(2014, 11, 18), new DateTime(2014, 11, 27), new DateTime(2014, 12, 31) };
+
+            Double result = new XIRR(cashFlows, dates).Calculate();
+            Assert.AreEqual(0.01905139, result);
+        }
+
+        [TestMethod]
+        public void MicrosoftSampleXIRR3()
+        {
+            // excel precision for XIRR is 8digits
+            List<double> cashFlows = new List<Double>() { -152878677.49, 4410000, 1700, 12754, 770, 47743488.63, 111644373.78 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2015, 12, 31), new DateTime(2016, 05, 27), new DateTime(2016, 08, 25),
+                                                            new DateTime(2016, 11, 29), new DateTime(2016, 12, 06), new DateTime(2016, 12, 30), new DateTime(2016, 12, 31)};
+
+            Double result = new XIRR(cashFlows, dates).Calculate();
+            Assert.AreEqual(0.07261154, result);
         }
 
         [TestMethod]

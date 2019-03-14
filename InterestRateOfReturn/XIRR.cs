@@ -185,9 +185,11 @@ namespace Excel.Lib
         public double Calculate(double precision = 0.00000001, int decimals = 8)
         {
             double result = precision + 1;
+            double previousResult = 0;
 
-            while ((_cf.calculationLoop < int.MaxValue) && (Math.Abs(result) > precision) )
+            while ((_cf.calculationLoop < int.MaxValue) && (Math.Abs(result-previousResult) > (precision/10) ) )
             {
+                previousResult = result;
                 result = _cf.CashFlowIteration();
             }
             return _cf.getInternalRate(decimals);                

@@ -29,6 +29,8 @@
     <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
     <AssemblyOwner>
     </AssemblyOwner>
+    <GenerateCreateScript>False</GenerateCreateScript>
+    <GenerateSqlClrDdl>True</GenerateSqlClrDdl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>C:\data\calculPerf\lib</OutputPath>
