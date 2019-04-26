@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CashFlow.cs" />
+    <Compile Include="ModifiedDietz.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TimeWeightedRateOfReturn.cs" />
     <Compile Include="XIRR.cs" />
   </ItemGroup>
   <ItemGroup>

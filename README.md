@@ -1,4 +1,4 @@
-# Functions for SQLServer
+﻿# Functions for SQLServer
 
 This is a VisualStudio 2017 project , implementing financial functions inside a MS SQL Server. ( thanks to CLR inside the MS SQL Server ).
 
@@ -31,13 +31,13 @@ The project is configured to deploy the [certificate](https://docs.microsoft.com
 IRR(values, [guess])
 
 WITH #Cash AS (
-  select top 10 * from #MytempTable
+  select <column> from <Table> where <event> in (...) 
 )
-SELECT dbo.IRR(Top10Records)
+SELECT dbo.IRR(#Cash)
 GO
 ```
 * Syntax 2
-
+IRR(values, floatingPoints,  )
 
 ##### 2. XIRR
 
@@ -53,9 +53,17 @@ A pure C# project is associated to the SQL Server project to implement the inter
 
 Returns the internal rate of return for a series of cash flows represented by the numbers in values.
 
-##### XIRR
+##### XIRR / Money-Weighted Rate of Return
 
-Use XIRR to calculate an internal rate of return for a series of cash flows on different dates.
+XIRR or Money-Weighted Return is the rate given by the equation
+
+```math
+\sum_n \cfrac{CashFlow_n}{(1 + XIRR)^\frac{\#days_n}{365}}  = 0
+```
+
+$$\sum_n \cfrac{CashFlow_n}{(1 + XIRR)^\frac{\#days_n}{365}}  = 0$$
+
+Use XIRR to calculate an internal rate of return for a series of cash flows on different dates. 
 
 Signature of the method is `public static double XIRR(List<Double> cashflows, List<DateTime> dates, int maxFloatingPoints = 3, double maxRate = 100000)`
 
@@ -67,9 +75,53 @@ var cashFlowsDates = new List<DateTime>() { DateTime.Parse("01/01/2008"), DateTi
 var xirr = Financial.XIRR(cashFlows,cashFlowsDates, 6);
 
 ```
+
+
+##### Time-Weighted Rate of Return
+
+from GIPS 
+ 
+Valuing the portfolio and calculating interim returns each time there is an external cash flow results in the most accurate method to calculate the time-weighted rates of return. 
+ 
+The formula for calculating the time-weighted portfolio return when there are no external cash flows is: 
+```math
+
+r_i = \cfrac{V_i^E - V_i^B}{V_i^B}
+
+Where
+r_i = the return for period i in which there are no external cash flows
+
+V_i^E = the ending value of the portfolio for period i 
+
+V_i^B = the beginning value of the portfolio for period i 
+
+```
+
+$$r_i = \cfrac{V_i^E - V_i^B}{V_i^B}$$
+
+
+When a portfolio experiences external cash flows during a period, the most accurate return is calculated by valuing the portfolio at the time of the external cash flow, calculating the time-weighted return for each sub-period (defined as the period between external cash flows), and then geometrically linking the sub-period returns using the following formula: 
+
+```math
+
+r_t^{TWR} = \bigg[ ( 1 + r_1 )  ( 1+ r_2 ) ... (1 + r_I )  \bigg] - 1 
+
+ where r_t^{TWR} is the time-weighted return for period t and period t consists of I sub-periods. 
+
+```
+
+$$r_t^{TWR} = \bigg[ ( 1 + r_1 )  ( 1+ r_2 ) ... (1 + r_I )  \bigg] - 1 $$
+
+
+
+
+ #### Modified Dietz method
+
 <TO BE DONE>
 to follow the same functionnalities than
 http://westclintech.com/SQL-Server-Financial-Functions/SQL-Server-XIRR-function
+https://www.spreadsheetml.com/financialmodeling/time_weighted_rate_of_return.shtml
+
 
 * Rates of Return - IRR, XIRR, NPV, RATE, DIETZ, etc.
 * Bond Figurations - ACCRINT, PRICE and YIELD for ODD-First and ODD-Last coupons, etc.

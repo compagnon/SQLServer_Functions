@@ -9,6 +9,7 @@ MUST BE DONE OUTSIDE VisualStudio , because "GRANT" is not allowed...
 CREATE MASTER KEY ENCRYPTION BY PASSWORD = '23987hxJ#KL95234nl0zBe';  
 GO  
 
+/*
 -- the certificate of visual studio is a PFX 
 CREATE CERTIFICATE ExcelFunctionCLR --AUTHORIZATION [$(DatabaseUser)]
 	FROM FILE = '$(ProjectDir)$(CertPublicKeyPath)'   
@@ -16,6 +17,14 @@ CREATE CERTIFICATE ExcelFunctionCLR --AUTHORIZATION [$(DatabaseUser)]
 		DECRYPTION BY PASSWORD = '$(CertificatePassword)' );
 GO    
 
+
+CREATE CERTIFICATE [ExcelFunctionCLR]
+    AUTHORIZATION [dbo]
+    FROM FILE = 'C:\localGIT\compagnon\SQLServer_Functions\SQLServerFunctions\Security\SQLServerPK.pfx_1.cer'
+    WITH PRIVATE KEY (FILE = 'C:\localGIT\compagnon\SQLServer_Functions\SQLServerFunctions\Security\SQLServerPK.pfx_1.pvk', DECRYPTION BY PASSWORD = 'SagisAM72!');
+
+GO
+*/
 
 -- create the login in the database if needed
 -- create a login  to add permission "UNSAFE ASSEMBLY" to the certificate

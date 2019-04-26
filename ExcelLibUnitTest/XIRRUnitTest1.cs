@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Excel.Lib;
+using InterestRateOfReturn;
 using System.Linq;
 
 namespace XIRRUnitTest
@@ -52,6 +52,10 @@ namespace XIRRUnitTest
 
             Double result = new XIRR(cashFlows, dates).Calculate();
             Assert.AreEqual(0.07261154, result);
+
+            //            -152878677,5    4410000 1700    12754   770 47743488,63 111644373,8
+            //             31 / 12 / 2015  27 / 05 / 2016  25 / 08 / 2016  29 / 11 / 2016  06 / 12 / 2016  30 / 12 / 2016  31 / 12 / 2016          0,072611538
+
         }
 
         [TestMethod]
@@ -114,6 +118,55 @@ namespace XIRRUnitTest
 
             var result = new XIRR(cashFlows, dates);
             Assert.AreEqual(0.1, result);
+        }
+
+        [TestMethod]
+        public void MicrosoftSampleCashFlowSameDate()
+        {
+            // some cashflow have got the same date
+            List<double> cashFlows = new List<Double>() { -152878677.49, 4410000, 1700, 50000, 70000, 12754, 70000, 47743488.63, 111644373.78 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2015, 12, 31), new DateTime(2016, 05, 27), new DateTime(2016, 08, 25),
+                                                            new DateTime(2016, 08, 25),new DateTime(2016, 08, 25),
+                                                            new DateTime(2016, 11, 29), new DateTime(2016, 12, 06), new DateTime(2016, 12, 30), new DateTime(2016, 12, 31)};
+
+            Double result = new XIRR(cashFlows, dates).Calculate();
+            Assert.AreEqual(0.0738901, result);
+        }
+        [TestMethod]
+        public void SampleNear100pc1()
+        {
+            // some cashflow have got the same date (error in excel)
+            List<double> cashFlows = new List<Double>() { -5155970.71, -6076366.17, -32377.53, -2279151.97, -2279151.97, -2279151.97, 6125786.09 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2019, 02, 28), new DateTime(2019, 02, 28), new DateTime(2019, 02, 28),
+                                                            new DateTime(2019, 02, 28),new DateTime(2019, 02, 28),new DateTime(2019, 02, 28),
+                                                            new DateTime(2019, 03, 31)};
+
+            Double result = new XIRR(cashFlows, dates).Calculate();
+            Assert.AreEqual(-0.99999712, result);
+
+        }
+        [TestMethod]
+        public void SampleNear100pc2()
+        {
+            // no error in excel , if merging cashflows
+            List<double> cashFlows = new List<Double>() { -18102170.32, 6125786.09 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2019, 02, 28), new DateTime(2019, 03, 31)};
+
+            Double result = new XIRR(cashFlows, dates).Calculate();
+            Assert.AreEqual(-0.99999712, result);
+
+        }
+
+        [TestMethod]
+        public void SampleNear0pc()
+        {
+            // error in excel
+            List<double> cashFlows = new List<Double>() { 16.8, -33000, 32377.53 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2018, 12, 31), new DateTime(2019, 02, 05), new DateTime(2019, 02, 28) };
+
+            Double result = new XIRR(cashFlows, dates).Calculate();
+            Assert.AreEqual(-0.25498632, result);
+
         }
 
 
