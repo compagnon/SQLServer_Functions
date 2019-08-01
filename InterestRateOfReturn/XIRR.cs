@@ -101,12 +101,10 @@ namespace InterestRateOfReturn
         /// <returns></returns>
         public double Calculate(double precision = 0.00000001, int decimals = 8)
         {
-            double result = precision + 1;
-            double previousResult = 0;
+            double result = precision + 1;            
 
-            while ((_cf.calculationLoop < int.MaxValue) && (Math.Abs(result-previousResult) > (precision/10) ) )
-            {
-                previousResult = result;
+            while ((_cf.calculationLoop < int.MaxValue) && ( result > (precision/10) ))
+            {                
                 result = _cf.CashFlowIteration();
             }
             return _cf.getInternalRate(decimals);                

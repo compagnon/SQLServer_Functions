@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace InterestRateOfReturn
 {
@@ -78,7 +76,7 @@ namespace InterestRateOfReturn
                 internalRateSup = middleRate;
             }
 
-            return middleSum;
+            return Math.Abs(internalRateInf - internalRateSup);
         }
 
         private double CashFlowSum(double interestRate)

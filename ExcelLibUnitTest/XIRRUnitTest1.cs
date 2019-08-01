@@ -79,7 +79,16 @@ namespace XIRRUnitTest
             Double result = new IRR(cashFlows).Calculate();
             Assert.AreEqual(0.08663095, result);
         }
-        
+
+        [TestMethod]
+        public void bugIRR()
+        {
+            List<double> cashFlows = new List<Double>() { -14413262, -825000, 3660000, 16240602 };
+            List<DateTime> dates = new List<DateTime>() { new DateTime(2007, 12, 31), new DateTime(2015, 01, 28), new DateTime(2015, 04, 10), new DateTime(2019, 05, 31) };
+            Double result = new XIRR(cashFlows, dates).Calculate(0.000001, 6);
+            Assert.AreEqual(0.026323, result);
+        }
+
         [TestMethod]
         public void LifeInsurance()
         {
