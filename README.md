@@ -79,25 +79,48 @@ var xirr = Financial.XIRR(cashFlows,cashFlowsDates, 6);
 
 ##### Time-Weighted Rate of Return
 
+This method requires to get for each equal sub-period : the value and if an external flow occurs, the flow (at the beginning or at the end of the sub-period)
+
 from GIPS 
  
 Valuing the portfolio and calculating interim returns each time there is an external cash flow results in the most accurate method to calculate the time-weighted rates of return. 
  
-The formula for calculating the time-weighted portfolio return when there are no external cash flows is: 
+In each period of time, the time-weighted portfolio return is: 
+
+When an external cash flow occurs at the beginning of the period :
+
 ```math
 
-r_i = \cfrac{V_i^E - V_i^B}{V_i^B}
-
-Where
-r_i = the return for period i in which there are no external cash flows
-
-V_i^E = the ending value of the portfolio for period i 
-
-V_i^B = the beginning value of the portfolio for period i 
+r_i = \cfrac{V_i^{End} - V_i^{Begin} - C_i}{V_i^{Begin} + C_i}
 
 ```
 
-$$r_i = \cfrac{V_i^E - V_i^B}{V_i^B}$$
+$$r_i = \cfrac{V_i^{End} - ( V_i^{Begin} + C_i)}{V_i^{Begin} + C_i}$$
+
+When an external cash flow occurs at the end of the period :
+
+```math
+
+r_i = \cfrac{V_i^{End} - C_i - V_i^{Begin}}{V_i^{Begin}}
+
+```
+
+$$r_i = \cfrac{V_i^{End} - C_i - V_i^{Begin}}{V_i^{Begin}}$$
+
+
+```math
+
+Where
+r_i = the return for period i
+
+V_i^{End} = the ending value of the portfolio for period i 
+
+V_i^{Begin} = the beginning value of the portfolio for period i
+
+C_i = an external cash flow at the beginning of the period
+
+```
+
 
 
 When a portfolio experiences external cash flows during a period, the most accurate return is calculated by valuing the portfolio at the time of the external cash flow, calculating the time-weighted return for each sub-period (defined as the period between external cash flows), and then geometrically linking the sub-period returns using the following formula: 
@@ -110,12 +133,28 @@ r_t^{TWR} = \bigg[ ( 1 + r_1 )  ( 1+ r_2 ) ... (1 + r_I )  \bigg] - 1
 
 ```
 
-$$r_t^{TWR} = \bigg[ ( 1 + r_1 )  ( 1+ r_2 ) ... (1 + r_I )  \bigg] - 1 $$
+$$r_t^{TWR} = \bigg[ ( 1 + r_1 )  ( 1+ r_2 ) ... (1 + r_I )  \bigg] - 1$$
 
 
+Please refer to 
+    https://www.gipsstandards.org/standards/Documents/Guidance/gs_calculation_methodology_clean.pdf
+    https://en.wikipedia.org/wiki/Time-weighted_return
 
+#### TWROR
+True time-weighted rate of return 
 
- #### Modified Dietz method
+##### Modified Dietz method (approximate the TWR)
+```math
+
+Modified Dietz Return = \cfrac{V^{End} - V^{Begin} - \sum CashFlow}{V_^{Begin} + \sum (Cashflow*weighting_Factor)}
+
+```
+
+$$Modified Dietz Return = \cfrac{V^{End} - V^{Begin} - \sum CashFlow}{V_^{Begin} + \sum (Cashflow*weighting_Factor)}$$
+
+where weighting_Factor is the ratio of number of days cash flows appears on total number of days
+
+weighting_Factor = 
 
 <TO BE DONE>
 to follow the same functionnalities than

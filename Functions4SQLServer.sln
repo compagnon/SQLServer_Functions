@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.352
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterestRateOfReturn", "InterestRateOfReturn\InterestRateOfReturn.csproj", "{1DF91E1B-80EF-4080-98F6-4731A3A0D7E6}"
 EndProject
@@ -11,8 +11,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQLServerFunctions", "SQLSe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DBCF757E-4E83-4A22-90BD-9FF9207B68C7}"
 	ProjectSection(SolutionItems) = preProject
+		ExcelLibUnitTest\Codingame_Labyrinth.cs = ExcelLibUnitTest\Codingame_Labyrinth.cs
 		README.md = README.md
-		TimeWeightedRateOfReturn.cs = TimeWeightedRateOfReturn.cs
 	EndProjectSection
 EndProject
 Global

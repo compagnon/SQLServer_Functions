@@ -70,8 +70,8 @@ namespace InterestRateOfReturn
                 IEnumerator<double?> cf_enum = cashFlow.GetEnumerator();
                 foreach (double v in portfolioValue)
                 {
-                    ptf.Add(new PortfolioTuple(v, cf_enum.Current));
                     cf_enum.MoveNext();
+                    ptf.Add(new PortfolioTuple(v, cf_enum.Current));                    
                 }                
             }
 
@@ -96,15 +96,14 @@ namespace InterestRateOfReturn
         /// <summary>
         /// Calculate the TWR
         /// </summary>
-        /// <param name="precision">The precision behind floating points. by default 10E-8 like excel</param>
         /// <param name="decimals">The number of decimal places in the return value. by default 8</param>
         /// <returns></returns>
-        public double Calculate(double precision = 0.00000001, int decimals = 8)
+        public double Calculate(int decimals = 8)
         {
             if (ptf_return is null)
             {
-                ptf_return = 0;
-                if (this.ptfValuedBeforeCF)
+                ptf_return = 1;
+                if (this.ptfValuedBeforeCF) // if the portfolio is valued immediately before each flow: Portfolio Initial Value must be composated by CashFlow
                 {
                     IEnumerator<PortfolioTuple> enumFrom0toNminus1 = ptf.GetEnumerator();
                     IEnumerator<PortfolioTuple> enumFrom1toN = ptf.GetEnumerator();
@@ -113,11 +112,11 @@ namespace InterestRateOfReturn
                     while(enumFrom1toN.MoveNext())
                     {
                         enumFrom0toNminus1.MoveNext();
-                        ptf_return += enumFrom1toN.Current.M / ( enumFrom0toNminus1.Current.M + ( enumFrom0toNminus1.Current.C ?? 0.0 ) );
+                        ptf_return *= enumFrom1toN.Current.M / ( enumFrom0toNminus1.Current.M + ( enumFrom0toNminus1.Current.C ?? 0.0 ) );
                     }
                     ptf_return -= 1;
                 }
-                else
+                else //  the portfolio is valued immediately after each external flow, at the end of the period : Portfolio Final Value must be composated by CashFlow
                 {
                     IEnumerator<PortfolioTuple> enumFrom0toNminus1 = ptf.GetEnumerator();
                     IEnumerator<PortfolioTuple> enumFrom1toN = ptf.GetEnumerator();
@@ -125,24 +124,14 @@ namespace InterestRateOfReturn
 
                     while (enumFrom1toN.MoveNext())
                     {
-                        ptf_return += ( enumFrom1toN.Current.M - ( enumFrom1toN.Current.C ?? 0.0 ) )/ enumFrom0toNminus1.Current.M;
+                        enumFrom0toNminus1.MoveNext();
+                        ptf_return *= ( enumFrom1toN.Current.M - ( enumFrom1toN.Current.C ?? 0.0 ) )/ enumFrom0toNminus1.Current.M;
                     }
                     ptf_return -= 1;
                 }
             }
 
-            return (double)ptf_return;
-            /*
-            double result = precision + 1;
-            double previousResult = 0;
-
-            while ((_cf.calculationLoop < int.MaxValue) && (Math.Abs(result - previousResult) > (precision / 10)))
-            {
-                previousResult = result;
-                result = _cf.CashFlowIteration();
-            }
-            return _cf.getInternalRate(decimals);
-            */
+            return Math.Round( (double)ptf_return, decimals);
         }
 
 

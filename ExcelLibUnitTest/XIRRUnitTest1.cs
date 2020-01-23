@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using InterestRateOfReturn;
 using System.Linq;
+using System.Collections;
 
 namespace XIRRUnitTest
 {
-
-
     [TestClass]
     public class Tests
     {
